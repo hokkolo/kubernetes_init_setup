@@ -15,4 +15,19 @@
             regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
             replace: '# \1'
       when: ansible_swaptotal_mb != 0 
+    - name: Install Docker and curl
+      apt: 
+        name:
+          - openssh-server
+          - docker.io
+          - curl
+        state: present
+    - name: Install GPG keys for kubernetes tools
+      apt_key:
+        url: "{{ item }}"
+        state: present
+      with_items:    
+        - https://packages.cloud.google.com/apt/doc/apt-key.gpg
+      tags: apps
 
+    
