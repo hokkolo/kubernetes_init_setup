@@ -1,6 +1,6 @@
 ---
 - name: Kubernetes initial cluster setup
-  hosts: master
+  hosts: cluster
   tasks:
     - name: Update repo and cache
       apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
@@ -30,4 +30,17 @@
         - https://packages.cloud.google.com/apt/doc/apt-key.gpg
       tags: apps
 
-    
+    - name: Adding Kubernetes repositories to system
+      apt_repository:
+        repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+        filename: kubernetes
+        state: present
+      tags: apps
+
+    - name: Install kubelet kubeadm kubectl
+      apt:
+        name: 
+          - kubelet
+          - kubeadm
+          - kubectl
+        state: present 
