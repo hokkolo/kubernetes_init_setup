@@ -4,10 +4,15 @@
   tasks:
     - name: Update repo and cache
       apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+      become: yes
     - name: Disable swap
       block:
         - name: swapoff
           command: swapoff -a
-        - 
+        - name: Remove from fstab
+          replace:
+            path: /etc/fstab
+            regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+            replace: '# \1'
       when: ansible_swaptotal_mb != 0 
 
