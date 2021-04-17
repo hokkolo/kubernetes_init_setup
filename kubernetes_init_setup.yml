@@ -1,0 +1,13 @@
+---
+- name: Kubernetes initial cluster setup
+  hosts: master
+  tasks:
+    - name: Update repo and cache
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+    - name: Disable swap
+      block:
+        - name: swapoff
+          command: swapoff -a
+        - 
+      when: ansible_swaptotal_mb != 0 
+
